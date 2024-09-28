@@ -21,7 +21,7 @@ public class Tasks {
     @Column(name = "DESCRTPTION")
     private String description;
     @Column(name = "PRIORITY")
-    private Integer priority;
+    private String priority;
     @Column(name = "STATUS")
     private String status;
     @Column(name = "START_DATE")
