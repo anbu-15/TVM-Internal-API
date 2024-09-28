@@ -1,7 +1,8 @@
 package com.tvm.internal.edit.controller;
 
 import com.tvm.internal.edit.model.LeaveRequest;
-import com.tvm.internal.edit.service.LeaveRequestServiceImpl; // Adjust the import as per your implementation
+import com.tvm.internal.edit.service.LeaveRequestService;
+import com.tvm.internal.edit.serviceImpl.LeaveRequestServiceImpl; // Adjust the import as per your implementation
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import java.util.Optional;
 public class LeaveRequestController {
 
     @Autowired
-    private LeaveRequestServiceImpl leaveRequestService; // Ensure this is the correct service interface
+    private LeaveRequestService leaveRequestService; // Ensure this is the correct service interface
 
     // Get all leave requests
     @GetMapping

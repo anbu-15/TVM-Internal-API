@@ -1,26 +1,61 @@
 package com.tvm.internal.edit.serviceImpl;
 
 import com.tvm.internal.edit.model.LeaveRequest;
+import com.tvm.internal.edit.repo.LeaveRequestRepo;
+import com.tvm.internal.edit.service.LeaveRequestService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
+public class LeaveRequestServiceImpl implements LeaveRequestService {
 
-public interface LeaveRequestServiceImpl {
+    @Autowired
+    private LeaveRequestRepo leaveRequestRepo;
 
-    List<LeaveRequest> getAllLeaveRequests();
 
-    // Retrieve a specific leave request by its ID
-    Optional<LeaveRequest> getLeaveRequestById(Long id);
+    @Override
+    public List<LeaveRequest> getAllLeaveRequests() {
+        return leaveRequestRepo.findAll();
+    }
 
-    // Create a new leave request
-    LeaveRequest createLeaveRequest(LeaveRequest leaveRequest);
 
-    // Update an existing leave request by its ID
-    LeaveRequest updateLeaveRequest(Long id, LeaveRequest leaveRequest);
+    @Override
+    public Optional<LeaveRequest> getLeaveRequestById(Long id) {
+        return leaveRequestRepo.findById(id);
+    }
 
-    // Delete a leave request by its ID
-    void deleteLeaveRequest(Long id);
+    @Override
+    public LeaveRequest createLeaveRequest(LeaveRequest leaveRequest) {
+        return leaveRequestRepo.save(leaveRequest);
+    }
 
+
+    @Override
+    public LeaveRequest updateLeaveRequest(Long id, LeaveRequest leaveRequest) {
+        Optional<LeaveRequest> existingRequest = leaveRequestRepo.findById(id);
+        if (existingRequest.isPresent()) {
+            LeaveRequest updatedRequest = existingRequest.get();
+            updatedRequest.setLeaveType(leaveRequest.getLeaveType());
+            updatedRequest.setStartDate(leaveRequest.getStartDate());
+            updatedRequest.setEndDate(leaveRequest.getEndDate());
+            updatedRequest.setTotalDays(leaveRequest.getTotalDays());
+            updatedRequest.setStatus(leaveRequest.getStatus());
+            updatedRequest.setReasonforLeave(leaveRequest.getReasonforLeave());
+            updatedRequest.setDateOfRequest(leaveRequest.getDateOfRequest());
+            updatedRequest.setComment(leaveRequest.getComment());
+            updatedRequest.setReasonforRejected(leaveRequest.getReasonforRejected());
+            updatedRequest.setColor(leaveRequest.getColor());
+            return leaveRequestRepo.save(updatedRequest);
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteLeaveRequest(Long id) {
+        leaveRequestRepo.deleteById(id);
+    }
 }
