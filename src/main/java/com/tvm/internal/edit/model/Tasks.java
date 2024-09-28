@@ -1,8 +1,6 @@
 package com.tvm.internal.edit.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -12,6 +10,7 @@ import java.util.Date;
 public class Tasks {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TASK_ID")
     private Integer taskId;
     @Column(name = "TASK_OWNER")
