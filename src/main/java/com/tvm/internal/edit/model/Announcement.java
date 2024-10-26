@@ -1,30 +1,29 @@
 package com.tvm.internal.edit.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
 @Data
+@Table(name = "announcements")
 public class Announcement {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ANNOUNCEMENT_ID")
-    private Long Id;
-    @Column(name = "ANNOUNCEMENT_NAME")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String name;
-    @Column(name = "ANNOUNCEMENT_TITLE")
     private String title;
-    @Column(name = "ANNOUNCEMENT_MESSAGE")
     private String message;
-    @Column(name = "ANNOUNCEMENT_ATTACHMENT")
-    private String attachment;
-    @Column(name = "ANNOUNCEMENT_CATEGORY")
     private String category;
-    @Column(name = "ANNOUNCEMENT_EXPIRY")
     private LocalDate expiry;
-    @Column(name = "ANNOUNCEMENT_LOCATION")
     private String location;
+
+    @Lob
+    private byte[] attachment;
 }
