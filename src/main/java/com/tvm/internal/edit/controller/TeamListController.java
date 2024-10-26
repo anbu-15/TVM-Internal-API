@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/teamlist")
@@ -26,15 +27,14 @@ public class TeamListController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TeamList> getTeamMemberById(@PathVariable Long id) {
-        return teamListService.getTeamMemberById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Optional<TeamList> getTeamMemberById(@PathVariable Long id) {
+        return teamListService.getTeamMemberById(id);
+
     }
 
     @PostMapping(value = "/add", consumes = "multipart/form-data")
     public ResponseEntity<TeamList> createTeamMember(
-            @RequestPart("teamMember") String teamMemberJson, // Accept JSON as String
+            @RequestPart("teamMember") String teamMemberJson,
             @RequestPart("photo") MultipartFile photo) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -53,12 +53,24 @@ public class TeamListController {
     @PutMapping("/{id}")
     public ResponseEntity<TeamList> updateTeamMember(
             @PathVariable Long id,
-            @RequestParam("teamMember") TeamList teamMember,
-            @RequestParam("photo") MultipartFile photo) {
+            @RequestPart("teamMember") String teamMemberJson,
+            @RequestPart(value = "photo", required = false) MultipartFile photo) {
         try {
-            teamMember.setPhoto(photo.getBytes());
-            TeamList updatedTeamMember = teamListService.updateTeamMember(id, teamMember);
-            return ResponseEntity.ok(updatedTeamMember);
+            ObjectMapper objectMapper = new ObjectMapper();
+            TeamList updatedTeamMember = objectMapper.readValue(teamMemberJson, TeamList.class);
+
+            // Check if the photo was provided and set it
+            if (photo != null && !photo.isEmpty()) {
+                updatedTeamMember.setPhoto(photo.getBytes());
+            }
+
+            TeamList teamMember = teamListService.updateTeamMember(id, updatedTeamMember);
+
+            if (teamMember != null) {
+                return ResponseEntity.ok(teamMember);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Not found
+            }
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
