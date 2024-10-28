@@ -34,16 +34,8 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     @Override
     public Optional<LeaveRequest> updateLeaveRequest(Long id, LeaveRequest leaveRequest) {
         return leaveRequestRepo.findById(id).map(existingRequest -> {
-            existingRequest.setLeaveType(leaveRequest.getLeaveType());
-            existingRequest.setStartDate(leaveRequest.getStartDate());
-            existingRequest.setEndDate(leaveRequest.getEndDate());
-            existingRequest.setTotalDays(leaveRequest.getTotalDays());
             existingRequest.setStatus(leaveRequest.getStatus());
-            existingRequest.setReasonforLeave(leaveRequest.getReasonforLeave());
-            existingRequest.setDateOfRequest(leaveRequest.getDateOfRequest());
             existingRequest.setComment(leaveRequest.getComment());
-            existingRequest.setReasonforRejected(leaveRequest.getReasonforRejected());
-            existingRequest.setColor(leaveRequest.getColor());
             return leaveRequestRepo.save(existingRequest);
         });
     }

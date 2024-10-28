@@ -13,37 +13,40 @@ public class LeaveRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "LEAVE_TYPE", nullable = false)
+    @Column(name = "LEAVE_TYPE")
     private String leaveType;
 
-    @Column(name = "START_DATE", nullable = false)
+    @Column(name = "START_DATE")
     private LocalDate startDate;
 
-    @Column(name = "END_DATE", nullable = false)
+    @Column(name = "END_DATE")
     private LocalDate endDate;
 
-    @Column(name = "TOTAL_DAYS", nullable = false)
+    @Column(name = "TOTAL_DAYS")
     private int totalDays;
 
-    @Column(name = "REASON_FOR_LEAVE", nullable = false)
-    private String reasonforLeave;
+    @Column(name = "REASON_FOR_LEAVE")
+    private String reason;
 
-    @Column(name = "STATUS", nullable = false)
+    @Column(name = "STATUS")
     private String status;
 
-    @Column(name = "DATE_OF_REQUEST", nullable = false)
+    @Column(name = "DATE_OF_REQUEST")
     private LocalDate dateOfRequest;
 
-    @Column(name = "BOOKED", nullable = false)
+    @Column(name = "BOOKED")
     private int booked;
 
-    @Column(name = "COMMENT", nullable = false)
+    @Column(name = "COMMENT")
     private String comment;
 
-    @Column(name = "REASON_FOR_REJECTED", nullable = false)
+    @Column(name = "teamEmail")
+    private String teamEmail;
+
+    @Column(name = "REASON_FOR_REJECTED")
     private String reasonforRejected;
 
-    @Column(name = "COLOR", nullable = false)
+    @Column(name = "COLOR")
     private String color;
 
 }
