@@ -21,7 +21,7 @@ public class AnnouncementController {
     @Autowired
     private AnnouncementService announcementService;
 
-    @PostMapping(value = "/add", consumes = "multipart/form-data")
+    @PostMapping( consumes = "multipart/form-data")
     public ResponseEntity<Announcements> createAnnouncement(
             @RequestPart("announcement") String announcementJson,
             @RequestPart(value = "attachment", required = false) MultipartFile attachment) {
@@ -40,7 +40,7 @@ public class AnnouncementController {
         }
     }
 
-    @PutMapping(value = "/update/{id}", consumes = "multipart/form-data")
+    @PutMapping(value = "/{id}", consumes = "multipart/form-data")
     public ResponseEntity<Announcements> updateAnnouncement(
             @PathVariable Long id,
             @RequestPart("announcement") String announcementJson,
