@@ -35,4 +35,13 @@ public class Announcements {
 
     @Column(name = "location")
     private String location;
+
+    @Column(name = "notifyAll")
+    private boolean notifyAll;
+
+    @Column(name = "pinAllAnnouncement")
+    private boolean pinAllAnnouncement;
+
+    @Column(name = "disableComments")
+    private boolean disableComments;
 }
