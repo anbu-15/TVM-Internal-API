@@ -16,12 +16,10 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     @Autowired
     private LeaveRequestRepo leaveRequestRepo;
 
-
     @Override
     public List<LeaveRequest> getAllLeaveRequests() {
         return leaveRequestRepo.findAll();
     }
-
 
     @Override
     public Optional<LeaveRequest> getLeaveRequestById(Long id) {
@@ -33,29 +31,30 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         return leaveRequestRepo.save(leaveRequest);
     }
 
-
     @Override
-    public LeaveRequest updateLeaveRequest(Long id, LeaveRequest leaveRequest) {
-        Optional<LeaveRequest> existingRequest = leaveRequestRepo.findById(id);
-        if (existingRequest.isPresent()) {
-            LeaveRequest updatedRequest = existingRequest.get();
-            updatedRequest.setLeaveType(leaveRequest.getLeaveType());
-            updatedRequest.setStartDate(leaveRequest.getStartDate());
-            updatedRequest.setEndDate(leaveRequest.getEndDate());
-            updatedRequest.setTotalDays(leaveRequest.getTotalDays());
-            updatedRequest.setStatus(leaveRequest.getStatus());
-            updatedRequest.setReasonforLeave(leaveRequest.getReasonforLeave());
-            updatedRequest.setDateOfRequest(leaveRequest.getDateOfRequest());
-            updatedRequest.setComment(leaveRequest.getComment());
-            updatedRequest.setReasonforRejected(leaveRequest.getReasonforRejected());
-            updatedRequest.setColor(leaveRequest.getColor());
-            return leaveRequestRepo.save(updatedRequest);
-        }
-        return null;
+    public Optional<LeaveRequest> updateLeaveRequest(Long id, LeaveRequest leaveRequest) {
+        return leaveRequestRepo.findById(id).map(existingRequest -> {
+            existingRequest.setLeaveType(leaveRequest.getLeaveType());
+            existingRequest.setStartDate(leaveRequest.getStartDate());
+            existingRequest.setEndDate(leaveRequest.getEndDate());
+            existingRequest.setTotalDays(leaveRequest.getTotalDays());
+            existingRequest.setStatus(leaveRequest.getStatus());
+            existingRequest.setReasonforLeave(leaveRequest.getReasonforLeave());
+            existingRequest.setDateOfRequest(leaveRequest.getDateOfRequest());
+            existingRequest.setComment(leaveRequest.getComment());
+            existingRequest.setReasonforRejected(leaveRequest.getReasonforRejected());
+            existingRequest.setColor(leaveRequest.getColor());
+            return leaveRequestRepo.save(existingRequest);
+        });
     }
 
     @Override
-    public void deleteLeaveRequest(Long id) {
-        leaveRequestRepo.deleteById(id);
+    public boolean deleteLeaveRequest(Long id) {
+
+        if (leaveRequestRepo.existsById(id)) {
+            leaveRequestRepo.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
