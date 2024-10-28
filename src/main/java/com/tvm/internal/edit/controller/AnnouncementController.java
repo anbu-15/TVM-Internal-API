@@ -62,13 +62,8 @@ public class AnnouncementController {
 
     @GetMapping
     public ResponseEntity<List<Announcements>> getAllAnnouncements() {
-        List<Announcements> announcements = announcementService.getAllAnnouncements();
 
-        if (announcements.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(announcements);
+        return ResponseEntity.ok(announcementService.getAllAnnouncements());
     }
 
     @GetMapping("/{id}")
