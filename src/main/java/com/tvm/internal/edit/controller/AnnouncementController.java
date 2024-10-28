@@ -1,7 +1,8 @@
 package com.tvm.internal.edit.controller;
 
 
-import com.tvm.internal.edit.model.Announcement;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tvm.internal.edit.model.Announcements;
 import com.tvm.internal.edit.serviceImpl.AnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,79 +11,78 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/announcements")
+@RequestMapping("/api/announcements")
 public class AnnouncementController {
 
     @Autowired
     private AnnouncementService announcementService;
 
+    @PostMapping(value = "/add", consumes = "multipart/form-data")
+    public ResponseEntity<Announcements> createAnnouncement(
+            @RequestPart("announcement") String announcementJson,
+            @RequestPart(value = "attachment", required = false) MultipartFile attachment) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Announcements announcement = objectMapper.readValue(announcementJson, Announcements.class);
+
+            if (attachment != null) {
+                announcement.setAttachment(attachment.getBytes()); // Ensure your Announcement model can handle the photo data
+            }
+
+            Announcements createdAnnouncement = announcementService.createAnnouncement(announcement, attachment);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdAnnouncement);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping(value = "/update/{id}", consumes = "multipart/form-data")
+    public ResponseEntity<Announcements> updateAnnouncement(
+            @PathVariable Long id,
+            @RequestPart("announcement") String announcementJson,
+            @RequestPart(value = "attachment", required = false) MultipartFile attachment) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Announcements updatedAnnouncement = objectMapper.readValue(announcementJson, Announcements.class);
+
+            if (attachment != null) {
+                updatedAnnouncement.setAttachment(attachment.getBytes());
+            }
+
+            Announcements announcement = announcementService.updateAnnouncement(id, updatedAnnouncement, attachment);
+            return ResponseEntity.ok(announcement);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @GetMapping
-    public List<Announcement> getAllAnnouncements() {
-        return announcementService.getAllAnnouncements();
+    public ResponseEntity<List<Announcements>> getAllAnnouncements() {
+        List<Announcements> announcements = announcementService.getAllAnnouncements();
+
+        if (announcements.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(announcements);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Announcement> getAnnouncementById(@PathVariable Long id) {
-        Optional<Announcement> announcement = announcementService.getAnnouncementById(id);
-        return announcement.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+    public ResponseEntity<Announcements> getAnnouncementById(@PathVariable Long id) {
+        Optional<Announcements> announcement = announcementService.getAnnouncementById(id);
 
-    @PostMapping
-    public ResponseEntity<Announcement> createAnnouncement(
-            @RequestParam("name") String name,
-            @RequestParam("title") String title,
-            @RequestParam("message") String message,
-            @RequestParam("category") String category,
-            @RequestParam("expiry") String expiry,
-            @RequestParam("location") String location,
-            @RequestParam("file") MultipartFile file) {
-        Announcement announcement = new Announcement();
-        announcement.setName(name);
-        announcement.setTitle(title);
-        announcement.setMessage(message);
-        announcement.setCategory(category);
-        announcement.setExpiry(LocalDate.parse(expiry));
-        announcement.setLocation(location);
-
-        try {
-            Announcement createdAnnouncement = announcementService.createAnnouncement(announcement, file);
-            return new ResponseEntity<>(createdAnnouncement, HttpStatus.CREATED);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        if (announcement.isPresent()) {
+            return ResponseEntity.ok(announcement.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Announcement> updateAnnouncement(
-            @PathVariable Long id,
-            @RequestParam("name") String name,
-            @RequestParam("title") String title,
-            @RequestParam("message") String message,
-            @RequestParam("category") String category,
-            @RequestParam("expiry") String expiry,
-            @RequestParam("location") String location,
-            @RequestParam("file") MultipartFile file) {
-        Announcement announcement = new Announcement();
-        announcement.setName(name);
-        announcement.setTitle(title);
-        announcement.setMessage(message);
-        announcement.setCategory(category);
-        announcement.setExpiry(LocalDate.parse(expiry));
-        announcement.setLocation(location);
-
-        try {
-            Announcement updatedAnnouncement = announcementService.updateAnnouncement(id, announcement, file);
-            return ResponseEntity.ok(updatedAnnouncement);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAnnouncement(@PathVariable Long id) {
