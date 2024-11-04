@@ -3,12 +3,12 @@ package com.tvm.internal.edit.controller;
 import com.tvm.internal.edit.model.Appraisal;
 import com.tvm.internal.edit.service.AppraisalService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/app")
 public class AppraisalController {
 
     @Autowired
@@ -20,7 +20,7 @@ public class AppraisalController {
     }
 
     @GetMapping("/appraisals/{id}")
-    public Appraisal getAppraisalById(@PathVariable UUID id) {
+    public Appraisal getAppraisalById(@PathVariable Long id) {
         return appraisalService.getAppraisalById(id);
     }
 
@@ -30,13 +30,15 @@ public class AppraisalController {
     }
 
     @PutMapping("/appraisals/{id}")
-    public Appraisal updateAppraisal(@PathVariable UUID id, @RequestBody Appraisal appraisal) {
+    public Appraisal updateAppraisal(@PathVariable Long id, @RequestBody Appraisal appraisal) {
         return appraisalService.updateAppraisal(id, appraisal);
     }
 
     @DeleteMapping("/appraisals/{id}")
-    public void deleteAppraisal(@PathVariable UUID id) {
+    public void deleteAppraisal(@PathVariable Long id) {
         appraisalService.deleteAppraisal(id);
     }
+
+
 }
 

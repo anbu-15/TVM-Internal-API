@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class AppraisalServiceImp implements AppraisalService {
@@ -19,7 +18,7 @@ public class AppraisalServiceImp implements AppraisalService {
         return appraisalRepository.findAll();
     }
 
-    public Appraisal getAppraisalById(UUID id) {
+    public Appraisal getAppraisalById(Long id) {
         return appraisalRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Appraisal not found"));
     }
 
@@ -27,16 +26,39 @@ public class AppraisalServiceImp implements AppraisalService {
         return appraisalRepository.save(appraisal);
     }
 
-    public Appraisal updateAppraisal(UUID id, Appraisal appraisalDetails) {
+
+    public Appraisal updateAppraisal(Long id, Appraisal appraisalDetails) {
         Appraisal appraisal = getAppraisalById(id);
-        appraisal.setPerformanceScore(appraisalDetails.getPerformanceScore());
+        // Update fields
+        appraisal.setEmployeeId(appraisalDetails.getEmployeeId());
+        appraisal.setName(appraisalDetails.getName());
+        appraisal.setJobTitle(appraisalDetails.getJobTitle());
+        appraisal.setDepartment(appraisalDetails.getDepartment());
+        appraisal.setManagerName(appraisalDetails.getManagerName());
+        appraisal.setAppraisalPeriod(appraisalDetails.getAppraisalPeriod());
+        appraisal.setPerformanceGoals(appraisalDetails.getPerformanceGoals());
+        appraisal.setSelfAssessment(appraisalDetails.getSelfAssessment());
+        appraisal.setManagerAssessment(appraisalDetails.getManagerAssessment());
+        appraisal.setStrengths(appraisalDetails.getStrengths());
+        appraisal.setAreasForImprovement(appraisalDetails.getAreasForImprovement());
         appraisal.setFeedback(appraisalDetails.getFeedback());
-        // Update other fields
+        appraisal.setActionPlanAndGoals(appraisalDetails.getActionPlanAndGoals());
+        appraisal.setFinalPerformanceRating(appraisalDetails.getFinalPerformanceRating());
+        appraisal.setManagerSignature(appraisalDetails.getManagerSignature());
+        appraisal.setEmployeeSignature(appraisalDetails.getEmployeeSignature());
+        appraisal.setDate(appraisalDetails.getDate());
+
         return appraisalRepository.save(appraisal);
     }
 
-    public void deleteAppraisal(UUID id) {
+
+    public void deleteAppraisal(Long id) {
         appraisalRepository.deleteById(id);
+    }
+
+    public String saveAppraisal(Appraisal appraisal) {
+        appraisalRepository.save(appraisal);
+        return "testing";
     }
 
 }
