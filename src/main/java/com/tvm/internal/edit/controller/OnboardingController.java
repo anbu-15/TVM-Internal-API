@@ -5,7 +5,6 @@ import com.tvm.internal.edit.service.OnboardingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -20,7 +19,7 @@ public class OnboardingController {
     }
 
     @GetMapping("/onboarding/{id}")
-    public Onboarding getOnboardingById(@PathVariable UUID id) {
+    public Onboarding getOnboardingById(@PathVariable Long id) {
         return onboardingService.getOnboardingById(id);
     }
 
@@ -30,13 +29,12 @@ public class OnboardingController {
     }
 
     @PutMapping("/onboarding/{id}")
-    public Onboarding updateOnboarding(@PathVariable UUID id, @RequestBody Onboarding onboarding) {
+    public Onboarding updateOnboarding(@PathVariable Long id, @RequestBody Onboarding onboarding) {
         return onboardingService.updateOnboarding(id, onboarding);
     }
 
     @DeleteMapping("/onboarding/{id}")
-    public void deleteOnboarding(@PathVariable UUID id) {
+    public void deleteOnboarding(@PathVariable Long id) {
         onboardingService.deleteOnboarding(id);
     }
 }
-
