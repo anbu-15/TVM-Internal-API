@@ -4,22 +4,45 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Entity
+@Table(name = "appraisals")
 public class Appraisal {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID appraisalId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private UUID employeeId;
-    private String reviewPeriod;
-    private String reviewDate;
-    private int performanceScore;
-    private String feedback;
+    private String employeeId;
+    private String name;
+    private String jobTitle;
+    private String department;
+    private String managerName;
+    private String appraisalPeriod;
+    private String finalPerformanceRating;
+    private String managerSignature;
+    private String employeeSignature;
+    private String date;
 
     @ElementCollection
-    private List<String> goals;
+    private List<PerformanceGoal> performanceGoals;
+
+    @Embedded
+    private SelfAssessment selfAssessment;
+
+    @Embedded
+    private ManagerAssessment managerAssessment;
+
+    @Embedded
+    private Strengths strengths;
+
+    @Embedded
+    private AreasForImprovement areasForImprovement;
+
+    @Embedded
+    private Feedback feedback;
+
+    @ElementCollection
+    private List<ActionPlanAndGoal> actionPlanAndGoals;
 }
