@@ -1,9 +1,9 @@
 package com.tvm.internal.edit.controller;
 
 import com.tvm.internal.edit.model.Appraisal;
+import com.tvm.internal.edit.model.SelfAssessment;
 import com.tvm.internal.edit.service.AppraisalService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -39,6 +39,9 @@ public class AppraisalController {
         appraisalService.deleteAppraisal(id);
     }
 
-
+    @GetMapping("/appraisals/{id}/self-asses")
+    public SelfAssessment getSESelfAssessment(@PathVariable Long id) {
+        return appraisalService.getSelfAssessmentService(id);
+    }
 }
 
