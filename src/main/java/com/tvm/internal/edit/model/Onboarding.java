@@ -11,7 +11,7 @@ import java.util.UUID;
 public class Onboarding {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Use IDENTITY for Long
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long onboardingId;
 
     private UUID employeeId;

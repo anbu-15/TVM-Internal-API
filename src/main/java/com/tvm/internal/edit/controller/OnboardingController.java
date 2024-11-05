@@ -19,7 +19,7 @@ public class OnboardingController {
     }
 
     @GetMapping("/onboarding/{id}")
-    public Onboarding getOnboardingById(@PathVariable Long id) { // Change to Long
+    public Onboarding getOnboardingById(@PathVariable Long id) {
         return onboardingService.getOnboardingById(id);
     }
 
@@ -29,12 +29,12 @@ public class OnboardingController {
     }
 
     @PutMapping("/onboarding/{id}")
-    public Onboarding updateOnboarding(@PathVariable Long id, @RequestBody Onboarding onboarding) { // Change to Long
+    public Onboarding updateOnboarding(@PathVariable Long id, @RequestBody Onboarding onboarding) {
         return onboardingService.updateOnboarding(id, onboarding);
     }
 
     @DeleteMapping("/onboarding/{id}")
-    public void deleteOnboarding(@PathVariable Long id) { // Change to Long
+    public void deleteOnboarding(@PathVariable Long id) {
         onboardingService.deleteOnboarding(id);
     }
 }
