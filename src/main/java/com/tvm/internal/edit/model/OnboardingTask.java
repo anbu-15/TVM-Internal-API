@@ -13,7 +13,7 @@ import java.util.UUID;
 public class OnboardingTask {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID taskId;
+    private UUID taskId; // Changed back to UUID
 
     private String description;
     private String dueDate;

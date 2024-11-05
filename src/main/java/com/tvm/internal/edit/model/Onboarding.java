@@ -11,8 +11,8 @@ import java.util.UUID;
 public class Onboarding {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID onboardingId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Use IDENTITY for Long
+    private Long onboardingId;
 
     private UUID employeeId;
     private String startDate;
