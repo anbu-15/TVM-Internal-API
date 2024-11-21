@@ -1,12 +1,10 @@
 package com.tvm.internal.Controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tvm.internal.edit.controller.LeaveRequestController;
 import com.tvm.internal.edit.model.LeaveRequest;
 import com.tvm.internal.edit.service.LeaveRequestService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -38,15 +36,15 @@ class LeaveRequestControllerTest {
         leaveRequest = new LeaveRequest();
         leaveRequest.setId(1L);
         leaveRequest.setLeaveType("Sick Leave");
-        leaveRequest.setStartDate(LocalDate.now());
-        leaveRequest.setEndDate(LocalDate.now().plusDays(3));
-        leaveRequest.setTotalDays(3);
-        leaveRequest.setReasonforLeave("Flu");
+//        leaveRequest.setStartDate(LocalDate.now());
+//        leaveRequest.setEndDate(LocalDate.now().plusDays(3));
+//        leaveRequest.setTotalDays(3);
+//        leaveRequest.setReasonforLeave("Flu");
         leaveRequest.setStatus("Pending");
         leaveRequest.setDateOfRequest(LocalDate.now());
         leaveRequest.setBooked(1);
-        leaveRequest.setComment("Need rest");
-        leaveRequest.setReasonforRejected("");
+//        leaveRequest.setComment("Need rest");
+//        leaveRequest.setReasonforRejected("");
         leaveRequest.setColor("red");
     }
 
@@ -98,7 +96,7 @@ class LeaveRequestControllerTest {
 
     @Test
     void testUpdateLeaveRequest() {
-        when(leaveRequestService.updateLeaveRequest(eq(1L), any(LeaveRequest.class))).thenReturn(leaveRequest);
+        when(leaveRequestService.updateLeaveRequest(eq(1L), any(LeaveRequest.class))).thenReturn(Optional.ofNullable(leaveRequest));
 
         ResponseEntity<LeaveRequest> response = leaveRequestController.updateLeaveRequest(1L, leaveRequest);
 
@@ -109,7 +107,7 @@ class LeaveRequestControllerTest {
 
     @Test
     void testDeleteLeaveRequest() {
-        doNothing().when(leaveRequestService).deleteLeaveRequest(1L);
+        when(leaveRequestService.deleteLeaveRequest(1L)).thenReturn(true);
 
         ResponseEntity<Void> response = leaveRequestController.deleteLeaveRequest(1L);
 
