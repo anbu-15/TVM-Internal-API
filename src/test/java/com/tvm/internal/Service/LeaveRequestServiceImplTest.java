@@ -19,8 +19,6 @@ import static org.mockito.Mockito.*;
 
 class LeaveRequestServiceImplTest {
 
-   // git push origin feature/internal/testcases
-
     @Mock
     private LeaveRequestRepo leaveRequestRepo;
 
