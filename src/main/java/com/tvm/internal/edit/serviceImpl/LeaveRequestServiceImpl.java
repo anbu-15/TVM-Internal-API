@@ -35,7 +35,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     public Optional<LeaveRequest> updateLeaveRequest(Long id, LeaveRequest leaveRequest) {
         return leaveRequestRepo.findById(id).map(existingRequest -> {
             existingRequest.setStatus(leaveRequest.getStatus());
-            existingRequest.setComment(leaveRequest.getComment());
+//            existingRequest.setComment(leaveRequest.getComment());
             return leaveRequestRepo.save(existingRequest);
         });
     }

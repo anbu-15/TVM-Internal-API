@@ -33,14 +33,14 @@ class LeaveRequestServiceImplTest {
         leaveRequest = new LeaveRequest();
         leaveRequest.setId(1L);
         leaveRequest.setLeaveType("Vacation");
-        leaveRequest.setStartDate(LocalDate.now());
-        leaveRequest.setEndDate(LocalDate.now().plusDays(5));
+//        leaveRequest.setStartDate(LocalDate.now());
+//        leaveRequest.setEndDate(LocalDate.now().plusDays(5));
         leaveRequest.setTotalDays(5);
         leaveRequest.setStatus("Pending");
-        leaveRequest.setReasonforLeave("Family trip");
+//        leaveRequest.setReasonforLeave("Family trip");
         leaveRequest.setDateOfRequest(LocalDate.now());
-        leaveRequest.setComment("Looking forward to it");
-        leaveRequest.setReasonforRejected(null);
+//        leaveRequest.setComment("Looking forward to it");
+//        leaveRequest.setReasonforRejected(null);
         leaveRequest.setColor("green");
     }
 
@@ -90,19 +90,19 @@ class LeaveRequestServiceImplTest {
 
         LeaveRequest updatedLeaveRequest = new LeaveRequest();
         updatedLeaveRequest.setLeaveType("Sick Leave");
-        updatedLeaveRequest.setStartDate(LocalDate.now());
-        updatedLeaveRequest.setEndDate(LocalDate.now().plusDays(3));
+//        updatedLeaveRequest.setStartDate(LocalDate.now());
+//        updatedLeaveRequest.setEndDate(LocalDate.now().plusDays(3));
         updatedLeaveRequest.setTotalDays(3);
         updatedLeaveRequest.setStatus("Approved");
-        updatedLeaveRequest.setReasonforLeave("Flu");
+//        updatedLeaveRequest.setReasonforLeave("Flu");
         updatedLeaveRequest.setDateOfRequest(LocalDate.now());
-        updatedLeaveRequest.setComment("Need to recover");
-        updatedLeaveRequest.setReasonforRejected(null);
+//        updatedLeaveRequest.setComment("Need to recover");
+//        updatedLeaveRequest.setReasonforRejected(null);
         updatedLeaveRequest.setColor("yellow");
 
-        LeaveRequest result = leaveRequestService.updateLeaveRequest(1L, updatedLeaveRequest);
+        Optional<LeaveRequest> result = leaveRequestService.updateLeaveRequest(1L, updatedLeaveRequest);
         assertNotNull(result);
-        assertEquals("Sick Leave", result.getLeaveType());
+        assertEquals("Sick Leave", result.get());
         verify(leaveRequestRepo, times(1)).findById(1L);
         verify(leaveRequestRepo, times(1)).save(any(LeaveRequest.class));
     }
@@ -111,7 +111,7 @@ class LeaveRequestServiceImplTest {
     void updateLeaveRequest_nonExistingId() {
         when(leaveRequestRepo.findById(2L)).thenReturn(Optional.empty());
 
-        LeaveRequest result = leaveRequestService.updateLeaveRequest(2L, leaveRequest);
+        Optional<LeaveRequest> result = leaveRequestService.updateLeaveRequest(2L, leaveRequest);
         assertNull(result);
         verify(leaveRequestRepo, times(1)).findById(2L);
     }
