@@ -52,9 +52,7 @@ class AnnouncementServiceTest {
     @Test
     void getAllAnnouncements() {
         when(announcementRepository.findAll()).thenReturn(Arrays.asList(announcement));
-
         List<Announcements> announcements = announcementService.getAllAnnouncements();
-
         assertNotNull(announcements);
         assertEquals(1, announcements.size());
         assertEquals("Test Announcement", announcements.get(0).getName());
@@ -63,9 +61,7 @@ class AnnouncementServiceTest {
     @Test
     void getAnnouncementById_existingId() {
         when(announcementRepository.findById(1L)).thenReturn(Optional.of(announcement));
-
         Optional<Announcements> foundAnnouncement = announcementService.getAnnouncementById(1L);
-
         assertTrue(foundAnnouncement.isPresent());
         assertEquals("Test Announcement", foundAnnouncement.get().getName());
     }
@@ -73,9 +69,7 @@ class AnnouncementServiceTest {
     @Test
     void getAnnouncementById_nonExistingId() {
         when(announcementRepository.findById(1L)).thenReturn(Optional.empty());
-
         Optional<Announcements> foundAnnouncement = announcementService.getAnnouncementById(1L);
-
         assertFalse(foundAnnouncement.isPresent());
     }
 
@@ -83,9 +77,7 @@ class AnnouncementServiceTest {
     void createAnnouncement_withAttachment() throws IOException {
         MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "Test File Content".getBytes());
         when(announcementRepository.save(any(Announcements.class))).thenReturn(announcement);
-
         Announcements savedAnnouncement = announcementService.createAnnouncement(announcement, file);
-
         assertNotNull(savedAnnouncement);
         assertEquals("Test Announcement", savedAnnouncement.getName());
         assertNotNull(savedAnnouncement.getAttachment());
@@ -94,9 +86,7 @@ class AnnouncementServiceTest {
     @Test
     void createAnnouncement_withoutAttachment() throws IOException {
         when(announcementRepository.save(any(Announcements.class))).thenReturn(announcement);
-
         Announcements savedAnnouncement = announcementService.createAnnouncement(announcement, null);
-
         assertNotNull(savedAnnouncement);
         assertEquals("Test Announcement", savedAnnouncement.getName());
         assertNull(savedAnnouncement.getAttachment());
@@ -106,9 +96,7 @@ class AnnouncementServiceTest {
     void updateAnnouncement_withAttachment() throws IOException {
         MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "Updated File Content".getBytes());
         when(announcementRepository.save(any(Announcements.class))).thenReturn(announcement);
-
         Announcements updatedAnnouncement = announcementService.updateAnnouncement(1L, announcement, file);
-
         assertNotNull(updatedAnnouncement);
         assertEquals("Test Announcement", updatedAnnouncement.getName());
         assertNotNull(updatedAnnouncement.getAttachment());
@@ -117,9 +105,7 @@ class AnnouncementServiceTest {
     @Test
     void updateAnnouncement_withoutAttachment() throws IOException {
         when(announcementRepository.save(any(Announcements.class))).thenReturn(announcement);
-
         Announcements updatedAnnouncement = announcementService.updateAnnouncement(1L, announcement, null);
-
         assertNotNull(updatedAnnouncement);
         assertEquals("Test Announcement", updatedAnnouncement.getName());
         assertNull(updatedAnnouncement.getAttachment());
@@ -128,9 +114,7 @@ class AnnouncementServiceTest {
     @Test
     void deleteAnnouncement_existingId() {
         doNothing().when(announcementRepository).deleteById(1L);
-
         announcementService.deleteAnnouncement(1L);
-
         verify(announcementRepository).deleteById(1L);
     }
 }
