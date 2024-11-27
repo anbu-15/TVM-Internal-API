@@ -1,8 +1,9 @@
 package com.tvm.internal.edit.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -16,13 +17,18 @@ public class Project {
     private String projectName;
     private String clientName;
     private String domain;
-    private LocalDate startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date startDate;
     private String voice;
-    private LocalDate voiceStartDate;
-    private LocalDate voiceEndDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date voiceStartDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date voiceEndDate;
     private String coding;
-    private LocalDate codingStartDate;
-    private LocalDate codingEndDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date codingStartDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date codingEndDate;
     private String projectStatus;
 
     @ElementCollection
