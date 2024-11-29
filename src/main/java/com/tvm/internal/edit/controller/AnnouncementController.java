@@ -3,6 +3,7 @@ package com.tvm.internal.edit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tvm.internal.edit.model.Announcements;
+import com.tvm.internal.edit.request.AnnouncementFilterRequest;
 import com.tvm.internal.edit.serviceImpl.AnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,20 +25,10 @@ public class AnnouncementController {
     @PostMapping(value = "/add", consumes = "multipart/form-data")
     public ResponseEntity<Announcements> createAnnouncement(
             @RequestPart("announcement") String announcementJson,
-            @RequestPart(value = "attachment", required = false) MultipartFile attachment) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            Announcements announcement = objectMapper.readValue(announcementJson, Announcements.class);
+            @RequestPart(value = "attachment", required = false) MultipartFile attachment) throws IOException {
 
-            if (attachment != null) {
-                announcement.setAttachment(attachment.getBytes()); // Ensure your Announcement model can handle the photo data
-            }
-
-            Announcements createdAnnouncement = announcementService.createAnnouncement(announcement, attachment);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdAnnouncement);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        Announcements createdAnnouncement = announcementService.createAnnouncement(announcementJson, attachment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdAnnouncement);
     }
 
     @PutMapping(value = "/update/{id}", consumes = "multipart/form-data")
@@ -83,5 +74,11 @@ public class AnnouncementController {
     public ResponseEntity<Void> deleteAnnouncement(@PathVariable Long id) {
         announcementService.deleteAnnouncement(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<Announcements>> getFilteredAnnouncements(@RequestBody AnnouncementFilterRequest filterRequest) {
+        List<Announcements> announcements = announcementService.getFilteredAnnouncements(filterRequest);
+        return ResponseEntity.ok(announcements);
     }
 }

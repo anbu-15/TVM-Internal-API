@@ -24,7 +24,7 @@ public class Announcements {
     private String message;
 
     @Lob
-    @Column(name = "attachment")
+    @Column(name = "attachment",columnDefinition = "BLOB")
     private byte[] attachment;
 
     @Column(name = "category")

@@ -77,7 +77,7 @@ class AnnouncementServiceTest {
     void createAnnouncement_withAttachment() throws IOException {
         MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "Test File Content".getBytes());
         when(announcementRepository.save(any(Announcements.class))).thenReturn(announcement);
-        Announcements savedAnnouncement = announcementService.createAnnouncement(announcement, file);
+        Announcements savedAnnouncement = announcementService.createAnnouncement("announcement", file);
         assertNotNull(savedAnnouncement);
         assertEquals("Test Announcement", savedAnnouncement.getName());
         assertNotNull(savedAnnouncement.getAttachment());
@@ -86,7 +86,7 @@ class AnnouncementServiceTest {
     @Test
     void createAnnouncement_withoutAttachment() throws IOException {
         when(announcementRepository.save(any(Announcements.class))).thenReturn(announcement);
-        Announcements savedAnnouncement = announcementService.createAnnouncement(announcement, null);
+        Announcements savedAnnouncement = announcementService.createAnnouncement("announcement", null);
         assertNotNull(savedAnnouncement);
         assertEquals("Test Announcement", savedAnnouncement.getName());
         assertNull(savedAnnouncement.getAttachment());
