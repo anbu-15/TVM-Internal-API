@@ -38,7 +38,6 @@ public class CommentServiceImpl implements CommentService {
     public Comment updateComment(Long id, Comment comment) {
         Comment existingComment = getCommentById(id);
         existingComment.setText(comment.getText());
-        existingComment.setAuthor(comment.getAuthor());
         existingComment.setAuthorType(comment.getAuthorType());
         existingComment.setCreatedAt(comment.getCreatedAt());
         return commentRepository.save(existingComment);

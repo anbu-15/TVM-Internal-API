@@ -13,7 +13,6 @@ public class Comment {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
         private String text;
-        private String author;
         private String authorType;
         @Column(name = "created_at")
         private LocalDateTime createdAt;
