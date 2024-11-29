@@ -80,7 +80,7 @@ class AnnouncementControllerTest {
         Announcements announcement = new Announcements();
         announcement.setId(1L);
         ObjectMapper objectMapper = new ObjectMapper();
-        when(announcementService.createAnnouncement(any(Announcements.class), any(MultipartFile.class)))
+        when(announcementService.createAnnouncement(anyString(), any(MultipartFile.class)))
                 .thenReturn(announcement);
 
         ResponseEntity<Announcements> response = announcementController.createAnnouncement(
@@ -90,7 +90,7 @@ class AnnouncementControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(announcement, response.getBody());
         verify(announcementService, times(1))
-                .createAnnouncement(any(Announcements.class), any(MultipartFile.class));
+                .createAnnouncement(anyString(), any(MultipartFile.class));
     }
 
     @Test
@@ -100,7 +100,7 @@ class AnnouncementControllerTest {
         String announcementJson = objectMapper.writeValueAsString(announcement);
 
         // Mock service to throw an exception
-        when(announcementService.createAnnouncement(any(Announcements.class), any(MultipartFile.class)))
+        when(announcementService.createAnnouncement(anyString(), any(MultipartFile.class)))
                 .thenThrow(new IOException("Test Exception"));
 
         // Act: Call the controller method
@@ -113,7 +113,7 @@ class AnnouncementControllerTest {
 
     @Test
     void createAnnouncement_ioException() throws IOException {
-        when(announcementService.createAnnouncement(any(Announcements.class), any(MultipartFile.class)))
+        when(announcementService.createAnnouncement(anyString(), any(MultipartFile.class)))
                 .thenThrow(new IOException("File error"));
 
         ResponseEntity<Announcements> response = announcementController.createAnnouncement(
