@@ -5,17 +5,18 @@ import com.tvm.internal.edit.model.Project;
 import com.tvm.internal.edit.service.ProjectService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -37,13 +38,13 @@ class ProjectControllerTest {
         project.setProjectName("Project Alpha");
         project.setClientName("Client X");
         project.setDomain("Domain Y");
-        project.setStartDate(LocalDate.now());
+        project.setStartDate(new Date());
         project.setVoice("Voice Example");
-        project.setVoiceStartDate(LocalDate.now());
-        project.setVoiceEndDate(LocalDate.now().plusDays(10));
+        project.setVoiceStartDate(new Date());
+        project.setVoiceEndDate(new Date());
         project.setCoding("Coding Example");
-        project.setCodingStartDate(LocalDate.now());
-        project.setCodingEndDate(LocalDate.now().plusDays(20));
+        project.setCodingStartDate(new Date());
+        project.setCodingEndDate(new Date());
         project.setProjectStatus("In Progress");
         project.setAsset(Arrays.asList("Asset 1", "Asset 2"));
     }
