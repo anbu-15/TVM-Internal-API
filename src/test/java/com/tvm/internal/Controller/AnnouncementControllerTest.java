@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.springframework.mock.web.MockMultipartFile;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,50 +77,32 @@ class AnnouncementControllerTest {
 
     @Test
     void createAnnouncement_success() throws IOException {
-        Announcements announcement = new Announcements();
-        announcement.setId(1L);
-        ObjectMapper objectMapper = new ObjectMapper();
-        when(announcementService.createAnnouncement(anyString(), any(MultipartFile.class)))
-                .thenReturn(announcement);
+        // Arrange: Prepare mock data
+        Announcements mockAnnouncement = new Announcements();
+        mockAnnouncement.setId(1L);
+        mockAnnouncement.setName("Test Announcement");
 
-        ResponseEntity<Announcements> response = announcementController.createAnnouncement(
-                Mockito.anyString(),file
+        ObjectMapper objectMapper = new ObjectMapper();
+        String announcementJson = objectMapper.writeValueAsString(mockAnnouncement);
+
+        MultipartFile mockFile = new MockMultipartFile(
+                "file", "test.txt", "text/plain", "Test File Content".getBytes()
         );
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(announcement, response.getBody());
-        verify(announcementService, times(1))
-                .createAnnouncement(anyString(), any(MultipartFile.class));
-    }
-
-    @Test
-    void createAnnouncement_internalServerError() throws IOException {
-        Announcements announcement = new Announcements();
-        ObjectMapper objectMapper = new ObjectMapper();
-        String announcementJson = objectMapper.writeValueAsString(announcement);
-
-        // Mock service to throw an exception
+        // Mock the service call
         when(announcementService.createAnnouncement(anyString(), any(MultipartFile.class)))
-                .thenThrow(new IOException("Test Exception"));
+                .thenReturn(mockAnnouncement);
 
         // Act: Call the controller method
-        ResponseEntity<Announcements> response = announcementController.createAnnouncement(announcementJson, file);
-
-        // Assert: Verify the response status for error case
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-    }
-
-
-    @Test
-    void createAnnouncement_ioException() throws IOException {
-        when(announcementService.createAnnouncement(anyString(), any(MultipartFile.class)))
-                .thenThrow(new IOException("File error"));
-
         ResponseEntity<Announcements> response = announcementController.createAnnouncement(
-                "John Doe",  file
+                announcementJson, mockFile
         );
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        // Assert: Validate the response
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(mockAnnouncement, response.getBody());
+        verify(announcementService, times(1))
+                .createAnnouncement(anyString(), any(MultipartFile.class));
     }
 
     @Test

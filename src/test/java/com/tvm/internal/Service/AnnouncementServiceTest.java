@@ -75,22 +75,55 @@ class AnnouncementServiceTest {
 
     @Test
     void createAnnouncement_withAttachment() throws IOException {
+        // Prepare valid JSON string
+        String announcementJson = "{ \"name\": \"Test Announcement\", \"category\": \"Test Category\" }";
+
+        // Create a mock file
         MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "Test File Content".getBytes());
-        when(announcementRepository.save(any(Announcements.class))).thenReturn(announcement);
-        Announcements savedAnnouncement = announcementService.createAnnouncement("announcement", file);
+
+        // Mock the returned object from the repository
+        Announcements mockAnnouncement = new Announcements();
+        mockAnnouncement.setName("Test Announcement");
+        mockAnnouncement.setCategory("Test Category");
+        mockAnnouncement.setAttachment(file.getBytes());
+
+        when(announcementRepository.save(any(Announcements.class))).thenReturn(mockAnnouncement);
+
+        // Call the method under test
+        Announcements savedAnnouncement = announcementService.createAnnouncement(announcementJson, file);
+
+        // Assert the results
         assertNotNull(savedAnnouncement);
         assertEquals("Test Announcement", savedAnnouncement.getName());
+        assertEquals("Test Category", savedAnnouncement.getCategory());
         assertNotNull(savedAnnouncement.getAttachment());
+        assertArrayEquals(file.getBytes(), savedAnnouncement.getAttachment());
     }
+
 
     @Test
     void createAnnouncement_withoutAttachment() throws IOException {
-        when(announcementRepository.save(any(Announcements.class))).thenReturn(announcement);
-        Announcements savedAnnouncement = announcementService.createAnnouncement("announcement", null);
+        // Prepare valid JSON string
+        String announcementJson = "{ \"name\": \"Test Announcement\", \"category\": \"Test Category\" }";
+
+        // Mock the returned object from the repository
+        Announcements mockAnnouncement = new Announcements();
+        mockAnnouncement.setName("Test Announcement");
+        mockAnnouncement.setCategory("Test Category");
+        mockAnnouncement.setAttachment(null); // No attachment
+
+        when(announcementRepository.save(any(Announcements.class))).thenReturn(mockAnnouncement);
+
+        // Call the method under test
+        Announcements savedAnnouncement = announcementService.createAnnouncement(announcementJson, null);
+
+        // Assert the results
         assertNotNull(savedAnnouncement);
         assertEquals("Test Announcement", savedAnnouncement.getName());
+        assertEquals("Test Category", savedAnnouncement.getCategory());
         assertNull(savedAnnouncement.getAttachment());
     }
+
 
     @Test
     void updateAnnouncement_withAttachment() throws IOException {
