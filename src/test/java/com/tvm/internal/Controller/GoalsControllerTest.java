@@ -47,11 +47,8 @@ class GoalsControllerTest {
     void testGetAllGoals() {
         List<Goal> goalsList = new ArrayList<>();
         goalsList.add(goal);
-
         when(goalService.getAllGoals()).thenReturn(goalsList);
-
         ResponseEntity<List<Goal>> response = goalsController.getAllGoals();
-
         assertThat(response).isNotNull();
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).hasSize(1);
@@ -62,9 +59,7 @@ class GoalsControllerTest {
     @Test
     void testGetGoalById() {
         when(goalService.getGoalById(anyLong())).thenReturn(Optional.of(goal));
-
         ResponseEntity<Goal> response = goalsController.getGoalById(1L);
-
         assertThat(response).isNotNull();
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).isEqualTo(goal);
@@ -74,9 +69,7 @@ class GoalsControllerTest {
     @Test
     void testGetGoalByIdNotFound() {
         when(goalService.getGoalById(anyLong())).thenReturn(Optional.empty());
-
         ResponseEntity<Goal> response = goalsController.getGoalById(999L);
-
         assertThat(response).isNotNull();
         assertThat(response.getStatusCodeValue()).isEqualTo(404);
         verify(goalService, times(1)).getGoalById(999L);
@@ -85,9 +78,7 @@ class GoalsControllerTest {
     @Test
     void testCreateGoal() {
         when(goalService.createGoal(any(Goal.class))).thenReturn(goal);
-
         ResponseEntity<Goal> response = goalsController.createGoal(goal);
-
         assertThat(response).isNotNull();
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).isEqualTo(goal);
@@ -97,9 +88,7 @@ class GoalsControllerTest {
     @Test
     void testUpdateGoal() {
         when(goalService.updateGoal(anyLong(), any(Goal.class))).thenReturn(goal);
-
         ResponseEntity<Goal> response = goalsController.updateGoal(1L, goal);
-
         assertThat(response).isNotNull();
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getBody()).isEqualTo(goal);
@@ -109,9 +98,7 @@ class GoalsControllerTest {
     @Test
     void testDeleteGoal() {
         doNothing().when(goalService).deleteGoal(anyLong());
-
         ResponseEntity<Void> response = goalsController.deleteGoal(1L);
-
         assertThat(response).isNotNull();
         assertThat(response.getStatusCodeValue()).isEqualTo(204);
         verify(goalService, times(1)).deleteGoal(1L);
