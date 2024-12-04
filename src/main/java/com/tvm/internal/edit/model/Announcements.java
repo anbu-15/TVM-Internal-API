@@ -1,8 +1,10 @@
 package com.tvm.internal.edit.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
-import java.sql.Timestamp;
+
+import java.util.Date;
 
 @Entity
 @Data
@@ -31,7 +33,8 @@ public class Announcements {
     private String category;
 
     @Column(name = "expiry")
-    private Timestamp expiry;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date expiry;
 
     @Column(name = "location")
     private String location;
