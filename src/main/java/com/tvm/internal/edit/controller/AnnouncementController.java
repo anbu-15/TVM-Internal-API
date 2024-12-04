@@ -76,7 +76,7 @@ public class AnnouncementController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/filter")
+    @PostMapping("/filter")
     public ResponseEntity<List<Announcements>> getFilteredAnnouncements(@RequestBody AnnouncementFilterRequest filterRequest) {
         List<Announcements> announcements = announcementService.getFilteredAnnouncements(filterRequest);
         return ResponseEntity.ok(announcements);
