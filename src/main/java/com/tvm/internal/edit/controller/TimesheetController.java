@@ -4,7 +4,6 @@ import com.tvm.internal.edit.service.TimesheetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -14,8 +13,13 @@ public class TimesheetController {
     private TimesheetService timesheetService;
 
     @GetMapping("/timesheets/{id}")
-    public Timesheet getTimesheetById(@PathVariable UUID id) {
+    public Timesheet getTimesheetById(@PathVariable Long id) {
         return timesheetService.getTimesheetById(id);
+    }
+
+    @GetMapping("/timesheets")
+    public List<Timesheet> getAllTimesheet() {
+        return timesheetService.getAllTimesheets();
     }
 
     @PostMapping("/timesheets")
@@ -24,12 +28,12 @@ public class TimesheetController {
     }
 
     @PutMapping("/timesheets/{id}")
-    public Timesheet updateTimesheet(@PathVariable UUID id, @RequestBody Timesheet timesheet) {
+    public Timesheet updateTimesheet(@PathVariable Long id, @RequestBody Timesheet timesheet) {
         return timesheetService.updateTimesheet(id, timesheet);
     }
 
     @DeleteMapping("/timesheets/{id}")
-    public void deleteTimesheet(@PathVariable UUID id) {
+    public void deleteTimesheet(@PathVariable Long id) {
         timesheetService.deleteTimesheet(id);
     }
 }

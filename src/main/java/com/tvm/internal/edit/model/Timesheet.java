@@ -1,25 +1,27 @@
 package com.tvm.internal.edit.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @Entity
 public class Timesheet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID timesheetId;
-
-    private UUID employeeId;
-    private String date;
-    private int hoursWorked;
-    private UUID projectId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String hrsType;
     private String description;
+    private String location;
+    private String project;
+    private String subtask;
+    private String task;
+    private String totalHours;
+    private boolean wfol;
+
+    @ElementCollection
+    private Map<String, Double> hours = new HashMap<>();
 
 }
