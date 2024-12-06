@@ -31,16 +31,12 @@ public class EducationServiceImpl implements EducationService {
 
     @Override
     public Education updateEducation(Long id, Education education) {
-        Education existingEducation = educationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Education not found with id: " + id)); // Will throw 404 error
-
-        // Update the fields of the existing education record
+        Education existingEducation = educationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Education not found with id: " + id));
         existingEducation.setCoursePursued(education.getCoursePursued());
         existingEducation.setInstitutionName(education.getInstitutionName());
         existingEducation.setDurationFrom(education.getDurationFrom());
         existingEducation.setDurationTo(education.getDurationTo());
         existingEducation.setCgpaObtained(education.getCgpaObtained());
-
-        // Save the updated education record to the database
         return educationRepository.save(existingEducation);
     }
 

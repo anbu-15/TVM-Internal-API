@@ -29,8 +29,8 @@ public class EducationController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getEducationById(@PathVariable Long id) {
         try {
-            Education education = educationService.getEducationById(id); // This will throw exception if not found
-            return ResponseEntity.ok(education); // 200 OK if found
+            Education education = educationService.getEducationById(id);
+            return ResponseEntity.ok(education);
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Message", ex.getMessage()).body(ex.getMessage()); // 404 Not Found with error message
         }
