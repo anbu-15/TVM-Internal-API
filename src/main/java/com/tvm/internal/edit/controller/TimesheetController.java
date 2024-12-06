@@ -1,36 +1,52 @@
 package com.tvm.internal.edit.controller;
+
 import com.tvm.internal.edit.model.Timesheet;
 import com.tvm.internal.edit.service.TimesheetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.UUID;
+import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/timesheet")
 public class TimesheetController {
 
     @Autowired
     private TimesheetService timesheetService;
 
-    @GetMapping("/timesheets/{id}")
-    public Timesheet getTimesheetById(@PathVariable UUID id) {
-        return timesheetService.getTimesheetById(id);
+    @PostMapping
+    public ResponseEntity<Timesheet> createTimesheet(@RequestBody Timesheet timesheet) {
+        Timesheet createdTimesheet = timesheetService.createTimeSheet(timesheet);
+        return ResponseEntity.ok(createdTimesheet);
     }
 
-    @PostMapping("/timesheets")
-    public Timesheet createTimesheet(@RequestBody Timesheet timesheet) {
-        return timesheetService.createTimesheet(timesheet);
+    @GetMapping
+    public ResponseEntity<List<Timesheet>> getAllTimeSheets() {
+        List<Timesheet> timesheets = timesheetService.getAllTimeSheets();
+        return ResponseEntity.ok(timesheets);
     }
 
-    @PutMapping("/timesheets/{id}")
-    public Timesheet updateTimesheet(@PathVariable UUID id, @RequestBody Timesheet timesheet) {
-        return timesheetService.updateTimesheet(id, timesheet);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getProfileById(@PathVariable Long id) {
+        try {
+            Timesheet timesheet = timesheetService.getTimeSheetById(id);
+            return ResponseEntity.ok(timesheet);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
-    @DeleteMapping("/timesheets/{id}")
-    public void deleteTimesheet(@PathVariable UUID id) {
-        timesheetService.deleteTimesheet(id);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTimesheet(@PathVariable Long id, @RequestBody Timesheet timesheet) {
+        try {
+            Timesheet updatedTimesheet = timesheetService.updateTimeSheet(id, timesheet);
+            return ResponseEntity.ok(updatedTimesheet);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
-}
+    }
 

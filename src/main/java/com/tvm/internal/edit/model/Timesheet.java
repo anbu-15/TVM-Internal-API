@@ -6,20 +6,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
-import java.util.UUID;
-
 @Data
 @Entity
 public class Timesheet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID timesheetId;
-
-    private UUID employeeId;
-    private String date;
-    private int hoursWorked;
-    private UUID projectId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String project;
+    private String location;
+    private String hoursType;
+    private String task;
+    private String subtask;
+    private String dailyHours;
+    private int totalHours;
     private String description;
-
 }
