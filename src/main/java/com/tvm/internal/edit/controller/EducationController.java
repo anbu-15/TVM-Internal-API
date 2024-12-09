@@ -1,8 +1,10 @@
 package com.tvm.internal.edit.controller;
 
 import com.tvm.internal.edit.model.Education;
+import com.tvm.internal.edit.repo.EducationRepository;
 import com.tvm.internal.edit.service.EducationService;
-import com.tvm.internal.exception.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +15,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/education")
 public class EducationController {
+    private static final Logger logger = LoggerFactory.getLogger(EducationController.class);
+
     @Autowired
     private EducationService educationService;
+
+    @Autowired
+    private EducationRepository educationRepository;
 
     @PostMapping
     public ResponseEntity<Education> createEducation(@RequestBody Education education) {
@@ -28,24 +35,38 @@ public class EducationController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getEducationById(@PathVariable Long id) {
-        try {
-            Education education = educationService.getEducationById(id);
-            return ResponseEntity.ok(education);
-        } catch (ResourceNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Message", ex.getMessage()).body(ex.getMessage()); // 404 Not Found with error message
+        if (!educationService.existsById(id)) {
+            logger.warn("Education not found with id: {}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Message", "Education not found with id: " + id).body("Education not found with id: " + id);
         }
+        Education education = educationService.getEducationById(id);
+        logger.info("Successfully retrieved education with id: {}", id);
+        return ResponseEntity.ok(education);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateEducation(@PathVariable Long id, @RequestBody Education education) {
         Education updatedEducation = educationService.updateEducation(id, education);
-        return ResponseEntity.ok().header("X-Message", "Education updated successfully").body(updatedEducation);
+        if (updatedEducation == null) {
+            logger.info("Education not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Education not found with id: " + id);
+        }
+        logger.info("Successfully updated education record with id: {}", id);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedEducation);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEducation(@PathVariable Long id) {
-        educationService.deleteEducation(id);
-        return ResponseEntity.ok("Education record with ID " + id + " deleted successfully");
+        ResponseEntity<String> deleteEducation = educationService.deleteEducation(id);
+
+        if (deleteEducation.getStatusCode() == HttpStatus.NOT_FOUND) {
+            logger.info("Education not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Education not found with id: " + id);
+        }
+
+        logger.info("Successfully deleted education record with id: {}", id);
+        return deleteEducation;
     }
+
 
 }
