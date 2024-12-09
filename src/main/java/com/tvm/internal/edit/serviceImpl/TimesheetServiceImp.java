@@ -8,7 +8,6 @@ import com.tvm.internal.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class TimesheetServiceImp implements TimesheetService {
@@ -20,7 +19,7 @@ public class TimesheetServiceImp implements TimesheetService {
         return timesheetRepository.findAll();
     }
 
-    public Timesheet getTimesheetById(UUID id) {
+    public Timesheet getTimesheetById(Long id) {
         return timesheetRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Timesheet not found"));
     }
 
@@ -28,16 +27,22 @@ public class TimesheetServiceImp implements TimesheetService {
         return timesheetRepository.save(timesheet);
     }
 
-    public Timesheet updateTimesheet(UUID id, Timesheet timesheetDetails) {
+    public Timesheet updateTimesheet(Long id, Timesheet timesheetDetails) {
         Timesheet timesheet = getTimesheetById(id);
-        timesheet.setDate(timesheetDetails.getDate());
-        timesheet.setHoursWorked(timesheetDetails.getHoursWorked());
+        timesheet.setHrsType(timesheetDetails.getHrsType());
         timesheet.setDescription(timesheetDetails.getDescription());
-        timesheet.setProjectId(timesheetDetails.getProjectId());
+        timesheet.setLocation(timesheetDetails.getLocation());
+        timesheet.setProject(timesheetDetails.getProject());
+        timesheet.setSubtask(timesheetDetails.getSubtask());
+        timesheet.setTask(timesheetDetails.getTask());
+        timesheet.setTotalHours(timesheetDetails.getTotalHours());
+        timesheet.setWfol(timesheetDetails.isWfol());
+        timesheet.setHours(timesheetDetails.getHours());
+
         return timesheetRepository.save(timesheet);
     }
 
-    public void deleteTimesheet(UUID id) {
+    public void deleteTimesheet(Long id) {
         timesheetRepository.deleteById(id);
     }
 }
