@@ -35,13 +35,12 @@ public class SkillController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getSkillById(@PathVariable Long id) {
+        Skill skill = skillService.getSkillById(id);
         if (!skillService.existsById(id)) {
             logger.warn("Skill not found with id: {}", id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .header("X-Message", "Skill not found with id: " + id)
-                    .body("Skill not found with id: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Message", "Skill not found with id: " + id).body("Skill not found with id: " + id);
         }
-        Skill skill = skillService.getSkillById(id);
+
         logger.info("Successfully retrieved skill with id: {}", id);
         return ResponseEntity.ok(skill);
     }
@@ -64,7 +63,7 @@ public class SkillController {
             logger.info("Skill not found with id: " + id);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Skill not found with id: " + id);
         }
-        logger.info("Successfully deleted skill with id: {}", id);
+        logger.info("Skill deleted skill with id: {}", id);
         return deleteResponse;
     }
 }
