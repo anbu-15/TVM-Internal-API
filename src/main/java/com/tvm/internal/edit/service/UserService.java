@@ -10,6 +10,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -67,6 +71,20 @@ public class UserService {
             return "fail";
         }
         return "fail";
+    }
+
+    public List<Map<String, String>> getAllUserDetails() {
+        List<Users> rawData = userRepository.findAll();
+
+        List<Map<String, String>> userDetails = new ArrayList<>();
+
+        for (Users data : rawData) {
+            Map<String, String> userMap = new HashMap<>();
+            userMap.put("username", data.getUsername());
+            userMap.put("roles", data.getRoles());
+            userDetails.add(userMap);
+        }
+        return userDetails;
     }
 
 }
