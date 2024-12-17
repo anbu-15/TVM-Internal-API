@@ -7,41 +7,63 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class ProfileServiceimpl implements ProfileService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProfileServiceimpl.class);
 
     @Autowired
     private ProfileRepository profileRepo;
 
     @Override
     public Profile createProfile(Profile profile) {
-        return profileRepo.save(profile);
+        Profile createdProfile = profileRepo.save(profile);
+        logger.info("Profile created: {}", createdProfile);
+        return createdProfile;
     }
 
     @Override
     public Profile getProfileById(Long id) {
-        return profileRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Profile with ID " + id + " not found."));
+        Profile profile = profileRepo.findById(id).orElse(null);
+        if (profile == null) {
+            logger.warn("Profile not found for ID: {}", id);
+        }
+        return profile;
     }
 
     @Override
     public List<Profile> getAllProfiles() {
-        return profileRepo.findAll();
+        List<Profile> profiles = profileRepo.findAll();
+        logger.info("Total profiles retrieved: {}", profiles.size());
+        return profiles;
     }
 
     @Override
     public Profile updateProfile(Long id, Profile profile) {
-        Profile existingProfile = profileRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Profile with ID " + id + " not found."));
-        profile.setId(existingProfile.getId()); // Preserve the ID of the existing profile
-        return profileRepo.save(profile);
+        Profile existingProfile = profileRepo.findById(id).orElse(null);
+        if (existingProfile != null) {
+            profile.setId(existingProfile.getId());
+            Profile updatedProfile = profileRepo.save(profile);
+            logger.info("Profile updated: {}", updatedProfile);
+            return updatedProfile;
+        } else {
+            logger.warn("Profile not found for update, ID: {}", id);
+            return null;
+        }
     }
 
     @Override
-    public void deleteProfile(Long id) {
-        if (!profileRepo.existsById(id)) {
-            throw new NoSuchElementException("Profile with ID " + id + " not found.");
+    public boolean deleteProfile(Long id) {
+        if (profileRepo.existsById(id)) {
+            profileRepo.deleteById(id);
+            logger.info("Profile deleted for ID: {}", id);
+            return true;
+        } else {
+            logger.warn("Profile not found for deletion, ID: {}", id);
+            return false;
         }
-        profileRepo.deleteById(id);
     }
 }

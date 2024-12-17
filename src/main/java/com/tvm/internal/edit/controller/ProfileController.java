@@ -3,56 +3,69 @@ package com.tvm.internal.edit.controller;
 import com.tvm.internal.edit.model.Profile;
 import com.tvm.internal.edit.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/profile")
 public class ProfileController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
+
     @Autowired
     private ProfileService profileService;
 
     @PostMapping
     public ResponseEntity<Profile> createProfile(@RequestBody Profile profile) {
-        return ResponseEntity.ok(profileService.createProfile(profile));
+        Profile createdProfile = profileService.createProfile(profile);
+        logger.info("Profile created: {}", createdProfile);
+        return ResponseEntity.ok(createdProfile);
     }
 
     @GetMapping
     public ResponseEntity<List<Profile>> getAllProfiles() {
-        return ResponseEntity.ok(profileService.getAllProfiles());
+        List<Profile> profiles = profileService.getAllProfiles();
+        logger.info("Retrieved all profiles, count: {}", profiles.size());
+        return ResponseEntity.ok(profiles);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProfileById(@PathVariable Long id) {
-        try {
-            Profile profile = profileService.getProfileById(id);
+    public ResponseEntity<Profile> getProfileById(@PathVariable Long id) {
+        Profile profile = profileService.getProfileById(id);
+        if (profile != null) {
+            logger.info("Profile retrieved for ID {}: {}", id, profile);
             return ResponseEntity.ok(profile);
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } else {
+            logger.warn("Profile not found for ID: {}", id);
+            return ResponseEntity.notFound().build();
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProfile(@PathVariable Long id, @RequestBody Profile profile) {
-        try {
-            Profile updatedProfile = profileService.updateProfile(id, profile);
+    public ResponseEntity<Profile> updateProfile(@PathVariable Long id, @RequestBody Profile profile) {
+        Profile updatedProfile = profileService.updateProfile(id, profile);
+        if (updatedProfile != null) {
+            logger.info("Profile updated for ID {}: {}", id, updatedProfile);
             return ResponseEntity.ok(updatedProfile);
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } else {
+            logger.warn("Profile not found for ID: {}", id);
+            return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProfile(@PathVariable Long id) {
-        try {
-            profileService.deleteProfile(id);
+    public ResponseEntity<String> deleteProfile(@PathVariable Long id) {
+        boolean isDeleted = profileService.deleteProfile(id);
+        if (isDeleted) {
+            logger.info("Profile deleted for ID: {}", id);
             return ResponseEntity.ok("Deleted Successfully!!!");
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } else {
+            logger.warn("Profile not found for deletion, ID: {}", id);
+            return ResponseEntity.notFound().build();
         }
     }
 }

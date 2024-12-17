@@ -25,8 +25,9 @@ public class Profile {
     @Column(name = "gender")
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    @Column(name = "employee_reference")
-    private String employeeReference;
+    @Lob
+    @Column(name = "employee_photo", columnDefinition = "LONGBLOB")
+    private byte[] employeePhoto;
     @Column(name = "mobile_number")
     private Long mobileNumber;
     @Column(name = "home_number")

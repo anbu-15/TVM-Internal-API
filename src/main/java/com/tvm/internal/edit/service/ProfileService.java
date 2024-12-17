@@ -13,5 +13,5 @@ public interface ProfileService {
 
     List<Profile> getAllProfiles();
 
-    void deleteProfile(Long id);
+    boolean deleteProfile(Long id);
 }
