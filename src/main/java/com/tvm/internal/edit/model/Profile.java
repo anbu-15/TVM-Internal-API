@@ -27,7 +27,7 @@ public class Profile {
     private Gender gender;
     @Lob
     @Column(name = "employee_photo", columnDefinition = "LONGBLOB")
-    private byte[] employeePhoto;
+    private String employeePhoto;
     @Column(name = "mobile_number")
     private Long mobileNumber;
     @Column(name = "home_number")
@@ -59,20 +59,20 @@ public class Profile {
     @Column(name = "marital_status")
     @Enumerated(EnumType.STRING)
     private MaritalStatus maritalStatus;
-    @Column(name = "t_name")
-    private String tname;
+    @Column(name = "name")
+    private String name;
     @Column(name = "t_relationship")
-    private String trelationship;
+    private String relationship;
     @Column(name = "t_age")
-    private Integer tage;
+    private Integer age;
     @Column(name = "t_oo")
-    private String too;
+    private String Occupation;
     @Column(name = "language")
     private String language;
     @Column(name = "can_speak")
-    private Boolean canSpeak;
+    private Boolean speak;
     @Column(name = "can_Read")
-    private Boolean canRead;
+    private Boolean Read;
     @Column(name = "can_write")
-    private Boolean canWrite;
+    private Boolean Write;
 }

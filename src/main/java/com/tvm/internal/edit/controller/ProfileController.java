@@ -10,7 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -27,7 +30,7 @@ public class ProfileController {
         Profile profile = new ObjectMapper().readValue(profileJson, Profile.class);
         if (file != null && !file.isEmpty()) {
             logger.info("Processing uploaded file: {}", file.getOriginalFilename());
-            profile.setEmployeePhoto(file.getBytes());
+            profile.setEmployeePhoto(Arrays.toString(file.getBytes()));
         } else {
             logger.warn("No image file uploaded for profile.");
         }
@@ -36,9 +39,55 @@ public class ProfileController {
         return ResponseEntity.ok(createdProfile);
     }
 
+    @PostMapping("/clob")
+    public ResponseEntity<Profile> createProfile(@RequestBody Profile profile) {
+        try {
+            if (profile.getEmployeePhoto() != null && !profile.getEmployeePhoto().trim().isEmpty()) {
+                byte[] decodedImage = java.util.Base64.getDecoder().decode(profile.getEmployeePhoto());
+                profile.setEmployeePhoto(Arrays.toString(decodedImage));
+            } else {
+                logger.warn("No image data provided for profile.");
+            }
+            Profile createdProfile = profileService.createProfile(profile);
+            logger.info("Profile created: {}", createdProfile);
+            return ResponseEntity.ok(createdProfile);
+        } catch (Exception e) {
+            logger.error("Error while creating profile: {}", e.getMessage());
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+
+//    @GetMapping
+//    public ResponseEntity<List<Profile>> getAllProfiles() {
+//        List<Profile> profiles = profileService.getAllProfiles();
+//        logger.info("Retrieved all profiles, count: {}", profiles.size());
+//        return ResponseEntity.ok(profiles);
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Profile> getProfileById(@PathVariable Long id) {
+//        Profile profile = profileService.getProfileById(id);
+//        if (profile != null) {
+//            logger.info("Profile retrieved for ID {}: {}", id, profile);
+//            return ResponseEntity.ok(profile);
+//        } else {
+//            logger.warn("Profile not found for ID: {}", id);
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
+
     @GetMapping
     public ResponseEntity<List<Profile>> getAllProfiles() {
         List<Profile> profiles = profileService.getAllProfiles();
+
+        profiles.forEach(profile -> {
+            if (profile.getEmployeePhoto() != null) {
+                String encodedImage = Base64.getEncoder().encodeToString(profile.getEmployeePhoto().getBytes());
+                profile.setEmployeePhoto(encodedImage); // Set the Base64 string for response
+            }
+        });
+
         logger.info("Retrieved all profiles, count: {}", profiles.size());
         return ResponseEntity.ok(profiles);
     }
@@ -47,6 +96,10 @@ public class ProfileController {
     public ResponseEntity<Profile> getProfileById(@PathVariable Long id) {
         Profile profile = profileService.getProfileById(id);
         if (profile != null) {
+            if (profile.getEmployeePhoto() != null) {
+                String encodedImage = Base64.getEncoder().encodeToString(profile.getEmployeePhoto().getBytes());
+                profile.setEmployeePhoto(encodedImage); // Set the Base64 string for response
+            }
             logger.info("Profile retrieved for ID {}: {}", id, profile);
             return ResponseEntity.ok(profile);
         } else {
@@ -55,11 +108,12 @@ public class ProfileController {
         }
     }
 
+
     @PutMapping("/{id}")
     public ResponseEntity<Profile> updateProfile(@PathVariable Long id, @RequestParam("profile") String profileJson, @RequestParam("employeePhoto") MultipartFile file) throws IOException {
         Profile profile = new ObjectMapper().readValue(profileJson, Profile.class);
         if (file != null && !file.isEmpty()) {
-            profile.setEmployeePhoto(file.getBytes());
+            profile.setEmployeePhoto(Arrays.toString(file.getBytes()));
         } else {
             logger.warn("No image file uploaded for profile update.");
         }
