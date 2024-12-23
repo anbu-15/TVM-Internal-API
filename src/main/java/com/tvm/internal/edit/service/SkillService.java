@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SkillService {
 
-    Skill createSkill(Skill skill);
+    List<Skill> createSkills(List<Skill> skills);
 
     List<Skill> getAllSkills();
 

@@ -17,13 +17,12 @@ public class EducationServiceImpl implements EducationService {
 
     private static final Logger logger = LoggerFactory.getLogger(EducationServiceImpl.class);
 
-
     @Autowired
     private EducationRepository educationRepository;
 
     @Override
-    public Education createEducation(Education education) {
-        return educationRepository.save(education);
+    public List<Education> createEducations(List<Education> educations) {
+        return educationRepository.saveAll(educations);
     }
 
     @Override
@@ -39,7 +38,7 @@ public class EducationServiceImpl implements EducationService {
 
     @Override
     public Education updateEducation(Long id, Education education) {
-        Education existingEducation = educationRepository.findById(id).orElse(null);                 //Throw(() -> new ResourceNotFoundException("Education not found with id: " + id));
+        Education existingEducation = educationRepository.findById(id).orElse(null);
 
         if (existingEducation == null) {
             logger.warn("Education not found with id: " + id);

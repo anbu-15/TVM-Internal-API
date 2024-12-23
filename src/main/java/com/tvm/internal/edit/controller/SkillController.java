@@ -2,6 +2,7 @@ package com.tvm.internal.edit.controller;
 
 import com.tvm.internal.edit.model.Skill;
 import com.tvm.internal.edit.service.SkillService;
+import com.tvm.internal.edit.serviceImpl.SkillServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,10 @@ public class SkillController {
     private SkillService skillService;
 
     @PostMapping
-    public ResponseEntity<Skill> createSkill(@RequestBody Skill skill) {
-        Skill createdSkill = skillService.createSkill(skill);
-        logger.info("Successfully created skill: {}", createdSkill);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdSkill);
+    public ResponseEntity<List<Skill>> createSkill(@RequestBody List<Skill> skills) {
+        List<Skill> createdSkills = skillService.createSkills(skills);
+        createdSkills.forEach(skill -> logger.info("Successfully created skill: {}", skill));
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdSkills);
     }
 
     @GetMapping
@@ -67,4 +68,3 @@ public class SkillController {
         return deleteResponse;
     }
 }
-
