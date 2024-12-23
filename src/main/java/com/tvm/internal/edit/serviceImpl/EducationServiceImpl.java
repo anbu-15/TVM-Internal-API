@@ -38,7 +38,7 @@ public class EducationServiceImpl implements EducationService {
 
     @Override
     public Education updateEducation(Long id, Education education) {
-        Education existingEducation = educationRepository.findById(id).orElse(null);                 //Throw(() -> new ResourceNotFoundException("Education not found with id: " + id));
+        Education existingEducation = educationRepository.findById(id).orElse(null);
 
         if (existingEducation == null) {
             logger.warn("Education not found with id: " + id);
