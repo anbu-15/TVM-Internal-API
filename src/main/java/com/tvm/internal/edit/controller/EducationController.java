@@ -24,8 +24,9 @@ public class EducationController {
     private EducationRepository educationRepository;
 
     @PostMapping
-    public ResponseEntity<Education> createEducation(@RequestBody Education education) {
-        return ResponseEntity.ok(educationService.createEducation(education));
+    public ResponseEntity<List<Education>> createEducations(@RequestBody List<Education> educations) {
+        List<Education> savedEducations = educationService.createEducations(educations);
+        return ResponseEntity.ok(savedEducations);
     }
 
     @GetMapping

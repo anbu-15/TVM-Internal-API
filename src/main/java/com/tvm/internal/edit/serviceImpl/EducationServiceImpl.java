@@ -17,13 +17,12 @@ public class EducationServiceImpl implements EducationService {
 
     private static final Logger logger = LoggerFactory.getLogger(EducationServiceImpl.class);
 
-
     @Autowired
     private EducationRepository educationRepository;
 
     @Override
-    public Education createEducation(Education education) {
-        return educationRepository.save(education);
+    public List<Education> createEducations(List<Education> educations) {
+        return educationRepository.saveAll(educations);
     }
 
     @Override

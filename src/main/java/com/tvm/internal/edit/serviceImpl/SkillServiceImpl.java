@@ -22,8 +22,8 @@ public class SkillServiceImpl implements SkillService {
     private SkillRepository skillRepository;
 
     @Override
-    public Skill createSkill(Skill skill) {
-        return skillRepository.save(skill);
+    public List<Skill> createSkills(List<Skill> skills) {
+        return skillRepository.saveAll(skills);
     }
 
     @Override

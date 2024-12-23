@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface EducationService {
-    Education createEducation(Education education);
+    List<Education> createEducations(List<Education> educations);
 
     List<Education> getAllEducations();
 

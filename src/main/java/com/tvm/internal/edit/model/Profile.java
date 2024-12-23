@@ -14,9 +14,9 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "first_name")
-    private String firstName;
+    private String firstname;
     @Column(name = "last_name")
-    private String lastName;
+    private String lastname;
     @Column(name = "Date_of_Birth")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date dob;
@@ -27,7 +27,7 @@ public class Profile {
     private Gender gender;
     @Lob
     @Column(name = "employee_photo", columnDefinition = "LONGBLOB")
-    private String employeePhoto;
+    private String employeephoto;
     @Column(name = "mobile_number")
     private Long mobileNumber;
     @Column(name = "home_number")
@@ -66,13 +66,13 @@ public class Profile {
     @Column(name = "t_age")
     private Integer age;
     @Column(name = "t_oo")
-    private String Occupation;
+    private String occupation;
     @Column(name = "language")
     private String language;
     @Column(name = "can_speak")
     private Boolean speak;
     @Column(name = "can_Read")
-    private Boolean Read;
+    private Boolean read;
     @Column(name = "can_write")
-    private Boolean Write;
+    private Boolean write;
 }
