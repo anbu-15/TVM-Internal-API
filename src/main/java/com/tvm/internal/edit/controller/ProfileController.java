@@ -25,11 +25,11 @@ public class ProfileController {
     private ProfileService profileService;
 
     @PostMapping
-    public ResponseEntity<Profile> createProfile(@RequestParam("profile") String profileJson, @RequestParam("employeePhoto") MultipartFile file) throws IOException {
+    public ResponseEntity<Profile> createProfile(@RequestParam("profile") String profileJson, @RequestParam("EmployeePhoto") MultipartFile file) throws IOException {
         Profile profile = new ObjectMapper().readValue(profileJson, Profile.class);
         if (file != null && !file.isEmpty()) {
             logger.info("Processing uploaded file: {}", file.getOriginalFilename());
-            profile.setEmployeephoto(Arrays.toString(file.getBytes()));
+            profile.setEmployeePhoto(Arrays.toString(file.getBytes()));
         } else {
             logger.warn("No image file uploaded for profile.");
         }
@@ -41,9 +41,9 @@ public class ProfileController {
     @PostMapping("/clob")
     public ResponseEntity<Profile> createProfile(@RequestBody Profile profile) {
         try {
-            if (profile.getEmployeephoto() != null && !profile.getEmployeephoto().trim().isEmpty()) {
-                byte[] decodedImage = java.util.Base64.getDecoder().decode(profile.getEmployeephoto());
-                profile.setEmployeephoto(Arrays.toString(decodedImage));
+            if (profile.getEmployeePhoto() != null && !profile.getEmployeePhoto().trim().isEmpty()) {
+                byte[] decodedImage = java.util.Base64.getDecoder().decode(profile.getEmployeePhoto());
+                profile.setEmployeePhoto(Arrays.toString(decodedImage));
             } else {
                 logger.warn("No image data provided for profile.");
             }
@@ -61,9 +61,9 @@ public class ProfileController {
         List<Profile> profiles = profileService.getAllProfiles();
 
         profiles.forEach(profile -> {
-            if (profile.getEmployeephoto() != null) {
-                String encodedImage = Base64.getEncoder().encodeToString(profile.getEmployeephoto().getBytes());
-                profile.setEmployeephoto(encodedImage); // Set the Base64 string for response
+            if (profile.getEmployeePhoto() != null) {
+                String encodedImage = Base64.getEncoder().encodeToString(profile.getEmployeePhoto().getBytes());
+                profile.setEmployeePhoto(encodedImage);
             }
         });
 
@@ -75,9 +75,9 @@ public class ProfileController {
     public ResponseEntity<Profile> getProfileById(@PathVariable Long id) {
         Profile profile = profileService.getProfileById(id);
         if (profile != null) {
-            if (profile.getEmployeephoto() != null) {
-                String encodedImage = Base64.getEncoder().encodeToString(profile.getEmployeephoto().getBytes());
-                profile.setEmployeephoto(encodedImage); // Set the Base64 string for response
+            if (profile.getEmployeePhoto() != null) {
+                String encodedImage = Base64.getEncoder().encodeToString(profile.getEmployeePhoto().getBytes());
+                profile.setEmployeePhoto(encodedImage); // Set the Base64 string for response
             }
             logger.info("Profile retrieved for ID {}: {}", id, profile);
             return ResponseEntity.ok(profile);
@@ -89,10 +89,10 @@ public class ProfileController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Profile> updateProfile(@PathVariable Long id, @RequestParam("profile") String profileJson, @RequestParam("employeePhoto") MultipartFile file) throws IOException {
+    public ResponseEntity<Profile> updateProfile(@PathVariable Long id, @RequestParam("profile") String profileJson, @RequestParam("EmployeePhoto") MultipartFile file) throws IOException {
         Profile profile = new ObjectMapper().readValue(profileJson, Profile.class);
         if (file != null && !file.isEmpty()) {
-            profile.setEmployeephoto(Arrays.toString(file.getBytes()));
+            profile.setEmployeePhoto(Arrays.toString(file.getBytes()));
         } else {
             logger.warn("No image file uploaded for profile update.");
         }
